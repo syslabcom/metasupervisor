@@ -1,0 +1,5 @@
+/.venv/
+/etc/
+/log/
+/Makefile.config
+/supervisord.conf

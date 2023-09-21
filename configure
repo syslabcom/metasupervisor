@@ -1,0 +1,22 @@
+#!/bin/bash
+read -p "Enter Python version (default 3.11): " PYTHON_VERSION
+PYTHON_VERSION=${PYTHON_VERSION:-3.11}
+
+read -p "Enter the supervisord listen port (default 9001): " SUPERVISORD_PORT
+SUPERVISORD_PORT=${SUPERVISORD_PORT:-9001}
+
+read -p "Enter the supervisord admin password (default admin): " SUPERVISORD_PASSWORD
+SUPERVISORD_PASSWORD=${SUPERVISORD_PASSWORD:-admin}
+
+# echo "PYTHON_VERSION = $PYTHON_VERSION" > Makefile.config
+# Write this to Makefile.config:
+touch Makefile.config
+chmod 600 Makefile.config
+
+cat << EOF > Makefile.config
+PYTHON_VERSION = $PYTHON_VERSION
+SUPERVISORD_PASSWORD = $SUPERVISORD_PASSWORD
+SUPERVISORD_PORT = $SUPERVISORD_PORT
+EOF
+
+echo -e "✔ Makefile.config written. You can edit it manually if you want to change something without running this script again."
