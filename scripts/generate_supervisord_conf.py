@@ -32,6 +32,11 @@ password={SUPERVISORD_PASSWORD}
 supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 """
 
+_banned_programs = {
+    ".venv",
+    "venv",
+}
+
 parent = pathlib.Path("..")
 executables = [
     executable.resolve()
@@ -45,9 +50,10 @@ with open("etc/supervisord.conf", "w") as conf:
     conf.write(SUPERVISORD_CONF_PREAMBLE)
     for executable in executables:
         program = executable.parent.parent.name
-        conf.write(f"\n[program:{program}]\n")
-        conf.write(f"command={executable} --nodaemon\n")
-        conf.write("autostart=false\n")
-        conf.write("autorestart=false\n")
-        conf.write("startretries=0\n")
-        conf.write("redirect_stderr=true\n")
+        if program not in _banned_programs:
+            conf.write(f"\n[program:{program}]\n")
+            conf.write(f"command={executable} --nodaemon\n")
+            conf.write("autostart=false\n")
+            conf.write("autorestart=false\n")
+            conf.write("startretries=0\n")
+            conf.write("redirect_stderr=true\n")
